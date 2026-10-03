@@ -7,6 +7,17 @@
     <meta name="description" content="Shop premium human hair wigs, bundles, closures, and extensions in Ghana. Luxury hair crafted for confidence and style with fast delivery across Ghana.">
     <meta name="keywords" content="Wigs Ghana, Human Hair Accra, Lace Frontal, Bone Straight, Hair Bundles, Hair Extensions Ghana">
 
+    <!-- Security headers.
+         A static host can only deliver CSP and Referrer-Policy through meta.
+         X-Frame-Options, X-Content-Type-Options, Permissions-Policy,
+         Cross-Origin-Opener-Policy and Cross-Origin-Resource-Policy are HTTP
+         response headers only and are ignored in meta - they are set in
+         _headers and .htaccess. frame-ancestors is left out of this tag on
+         purpose: browsers ignore it here and log a console warning, so it is
+         declared only in those two files. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
     <!-- Google Fonts for Luxury Aesthetic -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -144,7 +155,7 @@
             <!-- Collection cards: styles grouped in css/card.css (.collection-card) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="collection-card filter-category" data-category="Raw Bundles">
-                    <img src="a2.jpg" alt="Raw Virgin Bundles" class="collection-card__img" onerror="imageFallback(this)">
+                    <img src="a2.jpg" alt="Raw Virgin Bundles" class="collection-card__img">
                     <div class="collection-card__shade"></div>
                     <div class="collection-card__body">
                         <span class="collection-card__kicker">100% Unprocessed</span>
@@ -154,7 +165,7 @@
                 </div>
 
                 <div class="collection-card filter-category" data-category="Custom Wigs">
-                    <img src="a5.jpg" alt="HD Lace Wigs" class="collection-card__img" onerror="imageFallback(this)">
+                    <img src="a5.jpg" alt="HD Lace Wigs" class="collection-card__img">
                     <div class="collection-card__shade"></div>
                     <div class="collection-card__body">
                         <span class="collection-card__kicker">Pre-Plucked &amp; Bleached</span>
@@ -164,7 +175,7 @@
                 </div>
 
                 <div class="collection-card filter-category" data-category="Closures & Frontals">
-                    <img src="a3.jpg" alt="Closures &amp; Frontals" class="collection-card__img" onerror="imageFallback(this)">
+                    <img src="a3.jpg" alt="Closures &amp; Frontals" class="collection-card__img">
                     <div class="collection-card__shade"></div>
                     <div class="collection-card__body">
                         <span class="collection-card__kicker">Real HD Lace</span>

@@ -1,0 +1,42 @@
+# Security response headers — Apache (cPanel, most shared hosting)
+#
+# Equivalent of _headers for Apache. Requires mod_headers; on Debian/Ubuntu run
+# `a2enmod headers` and restart, otherwise this file is silently inert.
+#
+# GitHub Pages does not read this file — see _headers for the migration note.
+
+<IfModule mod_headers.c>
+    # Clickjacking. frame-ancestors is the modern directive; X-Frame-Options is
+    # kept for older browsers.
+    Header always set X-Frame-Options "DENY"
+
+    # Stop MIME-type sniffing.
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Send only the origin when crossing origins, nothing on HTTPS -> HTTP.
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Deny the browser features this storefront does not use.
+    Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), gamepad=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=()"
+
+    # Isolate this page's browsing context from other origins.
+    Header always set Cross-Origin-Opener-Policy "same-origin"
+
+    # Stop other sites from embedding this site's images and scripts.
+    Header always set Cross-Origin-Resource-Policy "same-origin"
+
+    # Identical to the Content-Security-Policy <meta> tag in index.html, plus
+    # frame-ancestors. That directive is ignored in a <meta> tag, so this is
+    # the only place it is actually enforced.
+    Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; upgrade-insecure-requests"
+
+    # Cross-Origin-Embedder-Policy is deliberately absent: require-corp is only
+    # needed for SharedArrayBuffer / cross-origin isolation. Google Fonts
+    # already sends CORP and would pass, but cdn.tailwindcss.com sends neither
+    # CORP nor ACAO, so require-corp would block the Tailwind script.
+    # Build Tailwind ahead of time, drop the CDN, then uncomment:
+    # Header always set Cross-Origin-Embedder-Policy "require-corp"
+
+    # Opt-in: browsers cache HSTS for a year. Add once the site is HTTPS-only.
+    # Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>

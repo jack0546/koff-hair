@@ -1,0 +1,42 @@
+# Security response headers — Netlify / Cloudflare Pages
+# Applied to every file in the deploy root.
+#
+# The index.html <meta> tag carries the CSP and Referrer-Policy as a fallback
+# for hosts that serve files verbatim (GitHub Pages). This file is what makes
+# the clickjacking, MIME-sniffing, feature and cross-origin headers real.
+#
+# GitHub Pages does not read this file. To get these headers there, migrate the
+# site to Netlify / Cloudflare Pages, or front the repo with your own proxy.
+
+/*
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; upgrade-insecure-requests
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), gamepad=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+
+# The CSP above is the index.html <meta> policy plus frame-ancestors. That
+# directive is ignored in a <meta> tag, so this is the only place it is
+# actually enforced.
+
+# Cross-Origin-Embedder-Policy is deliberately absent.
+#
+# require-corp is only needed for cross-origin isolation (SharedArrayBuffer,
+# high-resolution timers). This storefront uses none of them. Measured today,
+# fonts.googleapis.com and fonts.gstatic.com already send
+# Cross-Origin-Resource-Policy: cross-origin and would pass, but
+# cdn.tailwindcss.com sends neither CORP nor Access-Control-Allow-Origin, so
+# require-corp would block the Tailwind script and strip all styling.
+#
+# If you ever need cross-origin isolation, build Tailwind ahead of time, drop
+# the CDN, then enable this:
+#
+#   Cross-Origin-Embedder-Policy: require-corp
+#
+# Likewise Strict-Transport-Security is opt-in because browsers cache it for a
+# year and it is irreversible for subdomains. Add it once the site is
+# confirmed HTTPS-only:
+#
+#   Strict-Transport-Security: max-age=31536000

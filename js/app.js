@@ -159,6 +159,20 @@ function imageFallback(img) {
     img.src = FALLBACK_IMAGE;
 }
 
+/* Image error events do not bubble, so bind them on document in the capture
+   phase. Registered here rather than on DOMContentLoaded so that images which
+   fail while the parser is still running are caught too; anything that already
+   failed is swept up by applyImageFallbacks() below. */
+document.addEventListener('error', (e) => {
+    if (e.target instanceof HTMLImageElement) imageFallback(e.target);
+}, true);
+
+function applyImageFallbacks(root = document) {
+    root.querySelectorAll('img').forEach(img => {
+        if (img.complete && img.naturalWidth === 0) imageFallback(img);
+    });
+}
+
 function starRatingHTML(rating) {
     let stars = '';
     for (let i = 1; i <= 5; i++) {
@@ -176,8 +190,8 @@ function productCardTemplate(product) {
 
     return `
         <article class="product-card" data-id="${product.id}">
-            <div class="product-card__media" onclick="openQuickView(${product.id})" title="Quick View">
-                <img class="product-card__img" src="${product.image}" alt="${product.name}" loading="lazy" onerror="imageFallback(this)">
+            <div class="product-card__media" data-action="quick-view" data-id="${product.id}" title="Quick View">
+                <img class="product-card__img" src="${product.image}" alt="${product.name}" loading="lazy">
                 <span class="product-card__badge">${product.badge}</span>
                 <div class="product-card__overlay">
                     <span class="product-card__overlay-label">Quick View</span>
@@ -193,7 +207,7 @@ function productCardTemplate(product) {
                             <span>(${product.reviewsCount})</span>
                         </span>
                     </div>
-                    <h3 class="product-card__title" onclick="openQuickView(${product.id})">${product.name}</h3>
+                    <h3 class="product-card__title" data-action="quick-view" data-id="${product.id}">${product.name}</h3>
                     <p class="product-card__price">$${product.price.toFixed(2)} <span>USD</span></p>
                 </div>
 
@@ -202,7 +216,7 @@ function productCardTemplate(product) {
                         ${WHATSAPP_ICON}
                         <span>Order On WhatsApp</span>
                     </a>
-                    <button class="btn btn--ghost" onclick="addToBag(${product.id})">Add To Bag Drawer</button>
+                    <button class="btn btn--ghost" data-action="add-to-bag" data-id="${product.id}">Add To Bag Drawer</button>
                 </div>
             </div>
         </article>
@@ -290,7 +304,7 @@ function openQuickView(id) {
     content.innerHTML = `
         <div class="quickview">
             <div class="quickview__media">
-                <img src="${product.image}" alt="${product.name}" onerror="imageFallback(this)">
+                <img src="${product.image}" alt="${product.name}">
             </div>
             <div class="quickview__info">
                 <div>
@@ -390,20 +404,20 @@ function cartItemTemplate(item, index) {
     const itemTotal = item.price * item.quantity;
     return `
         <div class="cart-item">
-            <img class="cart-item__img" src="${item.image}" alt="${item.name}" onerror="imageFallback(this)">
+            <img class="cart-item__img" src="${item.image}" alt="${item.name}">
             <div class="cart-item__body">
                 <div>
                     <div class="cart-item__head">
                         <h4 class="cart-item__name">${item.name}</h4>
-                        <button class="cart-item__remove" onclick="updateCartQuantity(${index}, 0)" title="Remove item">&#10005;</button>
+                        <button class="cart-item__remove" data-action="cart-qty" data-index="${index}" data-qty="0" title="Remove item">&#10005;</button>
                     </div>
                     <p class="cart-item__variant">Length: ${item.length} | Color: ${item.color}</p>
                 </div>
                 <div class="cart-item__foot">
                     <span class="qty">
-                        <button class="qty__btn" onclick="updateCartQuantity(${index}, ${item.quantity - 1})">-</button>
+                        <button class="qty__btn" data-action="cart-qty" data-index="${index}" data-qty="${item.quantity - 1}">-</button>
                         <span class="qty__value">${item.quantity}</span>
-                        <button class="qty__btn" onclick="updateCartQuantity(${index}, ${item.quantity + 1})">+</button>
+                        <button class="qty__btn" data-action="cart-qty" data-index="${index}" data-qty="${item.quantity + 1}">+</button>
                     </span>
                     <span class="cart-item__total">$${itemTotal.toFixed(2)}</span>
                 </div>
@@ -444,6 +458,26 @@ function updateCartUI() {
 document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
     updateCartUI();
+    applyImageFallbacks();
+
+    /* Delegated handlers.
+       Every interactive element in dynamically rendered markup carries a
+       data-action hook instead of an inline onclick/onerror attribute, so the
+       page satisfies a CSP that omits 'unsafe-inline'. */
+
+    document.addEventListener('click', (e) => {
+        if (!(e.target instanceof Element)) return;
+        const trigger = e.target.closest('[data-action]');
+        if (!trigger) return;
+
+        if (trigger.dataset.action === 'quick-view') {
+            openQuickView(Number(trigger.dataset.id));
+        } else if (trigger.dataset.action === 'add-to-bag') {
+            addToBag(Number(trigger.dataset.id));
+        } else if (trigger.dataset.action === 'cart-qty') {
+            updateCartQuantity(Number(trigger.dataset.index), Number(trigger.dataset.qty));
+        }
+    });
 
     /* Navigation mobile toggle */
     const mobileMenu = document.getElementById('mobile-menu');
