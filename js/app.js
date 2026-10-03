@@ -14,7 +14,7 @@
    ============================================================ */
 
 /* ---------- 1. CONFIG ---------- */
-const PHONE_NUMBER = "233593026131";
+const PHONE_NUMBER = "233532340875";
 const CART_STORAGE_KEY = "hair_haven_cart";
 const FALLBACK_IMAGE = "a1.jpg";
 
