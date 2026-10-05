@@ -127,7 +127,47 @@ const products = [
         lengths: ["14 inch", "18 inch", "20 inch"],
         colors: ["Natural Black (1B)"],
         badge: "Skin Melt"
-    }
+    },
+     {
+        id: 9,
+        name: "Real HD 13x4 Ear-to-Ear Frontal",
+        category: "Closures & Frontals",
+        price: 175.00,
+        rating: 4.9,
+        reviewsCount: 31,
+        image: "b1.avif", 
+        description: "Pre-plucked natural hairline 13x4 Swiss HD Lace frontal offering versatile styling choices and parting freedom.",
+        lengths: ["14 inch", "18 inch", "20 inch"],
+        colors: ["Natural Black (1B)"],
+        badge: "Skin Melt"
+    },
+  {
+        id: 10,
+        name: "Real HD 13x4 Ear-to-Ear Frontal",
+        category: "Closures & Frontals",
+        price: 175.00,
+        rating: 4.9,
+        reviewsCount: 31,
+        image: "b1.avif", 
+        description: "Pre-plucked natural hairline 13x4 Swiss HD Lace frontal offering versatile styling choices and parting freedom.",
+        lengths: ["14 inch", "18 inch", "20 inch"],
+        colors: ["Natural Black (1B)"],
+        badge: "Skin Melt"
+    },
+  {
+        id: 11,
+        name: "Real HD 13x4 Ear-to-Ear Frontal",
+        category: "Closures & Frontals",
+        price: 175.00,
+        rating: 4.9,
+        reviewsCount: 31,
+        image: "b1.avif", 
+        description: "Pre-plucked natural hairline 13x4 Swiss HD Lace frontal offering versatile styling choices and parting freedom.",
+        lengths: ["14 inch", "18 inch", "20 inch"],
+        colors: ["Natural Black (1B)"],
+        badge: "Skin Melt"
+    },
+
 ];
 
 /* ---------- 3. STATE ---------- */
