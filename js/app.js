@@ -28,7 +28,7 @@ const products = [
         id: 1,
         name: "Raw Cambodian Straight Bundle",
         category: "Raw Bundles",
-        price: 135.00,
+        price: 135GHC.00,
         rating: 5.0,
         reviewsCount: 42,
         image: "b6.jpg",
@@ -326,7 +326,7 @@ function buildFullCartWhatsAppUrl(customerDetails) {
                    `   Price: $${itemTotal.toFixed(2)}\n`;
     });
 
-    message += `\n*TOTAL SUB-PRICE:* $${subtotal.toFixed(2)} USD\n` +
+    message += `\n*TOTAL SUB-PRICE:* $${subtotal.toFixed(2)} GHC\n` +
                `*DELIVERY FEE:* To be calculated on WhatsApp\n\n` +
                `Please confirm my order and share final invoice/payment details. Thank you!`;
 
