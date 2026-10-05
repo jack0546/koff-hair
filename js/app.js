@@ -17,10 +17,21 @@
 const PHONE_NUMBER = "233532340875";
 const CART_STORAGE_KEY = "hair_haven_cart";
 const FALLBACK_IMAGE = "a1.jpg";
+const CURRENCY_SYMBOL = "₵";
+const CURRENCY_CODE = "GHS";
 
 const WHATSAPP_ICON = `<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>`;
 
 const BAG_ICON = `<svg class="w-12 h-12 mb-3 empty-state__icon" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>`;
+
+/**
+ * Format a numeric amount as a localized currency string (e.g. "₵135.00").
+ * Uses a simple template so the value renders correctly inside plain DOM nodes
+ * and WhatsApp text messages without relying on Intl (which can vary by locale).
+ */
+function formatPrice(amount) {
+    return `${CURRENCY_SYMBOL}${amount.toFixed(2)}`;
+}
 
 /* ---------- 2. PRODUCT CATALOG ---------- */
 const products = [
@@ -128,46 +139,45 @@ const products = [
         colors: ["Natural Black (1B)"],
         badge: "Skin Melt"
     },
-     {
-        id: 9,
-        name: "Real HD 13x4 Ear-to-Ear Frontal",
-        category: "Closures & Frontals",
-        price: 175.00,
-        rating: 4.9,
-        reviewsCount: 31,
-        image: "b1.avif", 
-        description: "Pre-plucked natural hairline 13x4 Swiss HD Lace frontal offering versatile styling choices and parting freedom.",
-        lengths: ["14 inch", "18 inch", "20 inch"],
-        colors: ["Natural Black (1B)"],
-        badge: "Skin Melt"
-    },
-  {
+    {
         id: 10,
         name: "Real HD 13x4 Ear-to-Ear Frontal",
         category: "Closures & Frontals",
         price: 175.00,
         rating: 4.9,
         reviewsCount: 31,
-        image: "b3.webp", 
+        image: "b3.webp",
         description: "Pre-plucked natural hairline 13x4 Swiss HD Lace frontal offering versatile styling choices and parting freedom.",
         lengths: ["14 inch", "18 inch", "20 inch"],
         colors: ["Natural Black (1B)"],
         badge: "Skin Melt"
     },
-  {
+    {
         id: 11,
         name: "Real HD 13x4 Ear-to-Ear Frontal",
         category: "Closures & Frontals",
         price: 175.00,
         rating: 4.9,
         reviewsCount: 31,
-        image: "b2.jpeg", 
+        image: "b2.jpeg",
         description: "Pre-plucked natural hairline 13x4 Swiss HD Lace frontal offering versatile styling choices and parting freedom.",
         lengths: ["14 inch", "18 inch", "20 inch"],
         colors: ["Natural Black (1B)"],
         badge: "Skin Melt"
-    }
-
+    },
+    {
+        id: 12,
+        name: "Real HD 13x4 Ear-to-Ear Frontal",
+        category: "Closures & Frontals",
+        price: 175.00,
+        rating: 4.9,
+        reviewsCount: 31,
+        image: "b1.avif",
+        description: "Pre-plucked natural hairline 13x4 Swiss HD Lace frontal offering versatile styling choices and parting freedom.",
+        lengths: ["14 inch", "18 inch", "20 inch"],
+        colors: ["Natural Black (1B)"],
+        badge: "Skin Melt"
+    },
 ];
 
 /* ---------- 3. STATE ---------- */
@@ -248,7 +258,7 @@ function productCardTemplate(product) {
                         </span>
                     </div>
                     <h3 class="product-card__title" data-action="quick-view" data-id="${product.id}">${product.name}</h3>
-                    <p class="product-card__price">$${product.price.toFixed(2)} <span>GHC</span></p>
+                    <p class="product-card__price">${formatPrice(product.price)} <span>${CURRENCY_CODE}</span></p>
                 </div>
 
                 <div class="product-card__actions">
@@ -301,7 +311,7 @@ function buildSingleProductWhatsAppUrl(product, selectedLength, selectedColor) {
     const text = `Hello Hair Haven, I want to book/order the following item:\n\n` +
                  `*Product:* ${product.name}\n` +
                  `*Category:* ${product.category}\n` +
-                 `*Price:* $${product.price.toFixed(2)}\n` +
+                 `*Price:* ${formatPrice(product.price)}\n` +
                  `*Selected Length:* ${selectedLength || product.lengths[0]}\n` +
                  `*Selected Color:* ${selectedColor || product.colors[0]}\n\n` +
                  `Please let me know the availability and payment options.`;
@@ -323,10 +333,10 @@ function buildFullCartWhatsAppUrl(customerDetails) {
         subtotal += itemTotal;
         message += `${i + 1}. ${item.name}\n` +
                    `   Qty: ${item.quantity} | Length: ${item.length} | Color: ${item.color}\n` +
-                   `   Price: $${itemTotal.toFixed(2)}\n`;
+                    `   Price: ${formatPrice(itemTotal)}\n`;
     });
 
-    message += `\n*TOTAL SUB-PRICE:* $${subtotal.toFixed(2)} GHC\n` +
+    message += `\n*TOTAL SUB-PRICE:* ${formatPrice(subtotal)} ${CURRENCY_CODE}\n` +
                `*DELIVERY FEE:* To be calculated on WhatsApp\n\n` +
                `Please confirm my order and share final invoice/payment details. Thank you!`;
 
@@ -354,7 +364,7 @@ function openQuickView(id) {
                         ${starRatingHTML(product.rating)}
                         <span class="quickview__reviews">(${product.reviewsCount} customer reviews)</span>
                     </div>
-                    <p class="quickview__price">$${product.price.toFixed(2)} USD</p>
+                    <p class="quickview__price">${formatPrice(product.price)} ${CURRENCY_CODE}</p>
                     <p class="quickview__desc">${product.description}</p>
 
                     <div class="quickview__options">
@@ -459,7 +469,7 @@ function cartItemTemplate(item, index) {
                         <span class="qty__value">${item.quantity}</span>
                         <button class="qty__btn" data-action="cart-qty" data-index="${index}" data-qty="${item.quantity + 1}">+</button>
                     </span>
-                    <span class="cart-item__total">$${itemTotal.toFixed(2)}</span>
+                    <span class="cart-item__total">${formatPrice(itemTotal)}</span>
                 </div>
             </div>
         </div>
@@ -483,15 +493,15 @@ function updateCartUI() {
                 <p class="empty-state__text">Select luxury extensions to book via WhatsApp.</p>
             </div>
         `;
-        cartSubtotal.textContent = "$0.00";
-        cartTotal.textContent = "$0.00";
+        cartSubtotal.textContent = formatPrice(0);
+        cartTotal.textContent = formatPrice(0);
         return;
     }
 
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     cartItemsContainer.innerHTML = cart.map(cartItemTemplate).join('');
-    cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
-    cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+    cartSubtotal.textContent = formatPrice(subtotal);
+    cartTotal.textContent = formatPrice(subtotal);
 }
 
 /* ---------- 8. EVENTS ---------- */
