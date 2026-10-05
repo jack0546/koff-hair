@@ -248,7 +248,7 @@ function productCardTemplate(product) {
                         </span>
                     </div>
                     <h3 class="product-card__title" data-action="quick-view" data-id="${product.id}">${product.name}</h3>
-                    <p class="product-card__price">$${product.price.toFixed(2)} <span>USD</span></p>
+                    <p class="product-card__price">$${product.price.toFixed(2)} <span>GHC</span></p>
                 </div>
 
                 <div class="product-card__actions">
@@ -326,7 +326,7 @@ function buildFullCartWhatsAppUrl(customerDetails) {
                    `   Price: $${itemTotal.toFixed(2)}\n`;
     });
 
-    message += `\n*TOTAL SUB-PRICE:* $${subtotal.toFixed(2)} USD\n` +
+    message += `\n*TOTAL SUB-PRICE:* $${subtotal.toFixed(2)} GHC\n` +
                `*DELIVERY FEE:* To be calculated on WhatsApp\n\n` +
                `Please confirm my order and share final invoice/payment details. Thank you!`;
 
