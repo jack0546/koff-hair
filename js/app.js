@@ -166,7 +166,7 @@ const products = [
         lengths: ["14 inch", "18 inch", "20 inch"],
         colors: ["Natural Black (1B)"],
         badge: "Skin Melt"
-    },
+    }
 
 ];
 
