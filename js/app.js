@@ -326,7 +326,7 @@ function buildFullCartWhatsAppUrl(customerDetails) {
                    `   Price: $${itemTotal.toFixed(2)}\n`;
     });
 
-    message += `\n*TOTAL SUB-PRICE:* $${subtotal.toFixed(2)} GHC\n` +
+    message += `\n*TOTAL SUB-PRICE:* $${subtotal.toFixed(2)} USD\n` +
                `*DELIVERY FEE:* To be calculated on WhatsApp\n\n` +
                `Please confirm my order and share final invoice/payment details. Thank you!`;
 
